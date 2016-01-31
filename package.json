@@ -1,0 +1,49 @@
+{
+  "name": "SlackDrone",
+  "version": "0.1.0",
+  "description": "Control Parrot Minidrone via Slack",
+  "main": "index.js",
+  "keywords": [
+    "bluetooth",
+    "ble",
+    "parrot",
+    "minidrone",
+    "drone",
+    "quadcopter",
+    "multicopter",
+    "flight"
+  ],
+  "author": {
+    "name": "Paul Addicott-Evans",
+    "web": "http://pebblecode.com/"
+  },
+  "dependencies": {
+    "debug": "^2.1.1",
+    "lodash": "3.9.3",
+    "noble": "^1.1.0",
+    "slack-node": "0.1.7",
+    "express": "^4.10.2",
+    "socket.io": "^1.4.4",
+    "hapi": "^11.1.2",
+    "inert": "^3.2.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-mocha-test": "^0.12.7",
+    "keypress": "^0.2.1",
+    "logitech-dual-action-controller": "git+https://github.com/voodootikigod/node-logitech-dual-action-controller.git",
+    "mocha": "2.2.5",
+    "should": "6.0.3",
+    "sinon": "1.14.1",
+    "temporal": "^0.4.0"
+  },
+  "license": {
+    "name": "MIT",
+    "url": "http://opensource.org/licenses/MIT"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ]
+}
