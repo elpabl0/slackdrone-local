@@ -20,7 +20,17 @@ io.on('connection', function(socket){
     io.emit('chat message', msg);
     var actioned = "Unknown Command";
     s.setWebhook("https://hooks.slack.com/services/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");
-    if (ACTIVE && msg) {
+    if (msg == "dronebot status") {
+      if (ACTIVE) {
+        var actioned = "Dronebot found:" + d.name;
+        slackreport(actioned);
+      } else {
+        var actioned = "No Dronebot found";
+        slackreport(actioned);
+      }
+
+    };
+  if (ACTIVE && msg) {
       if (msg == "dronebot launch") {
       var actioned = "Dronebot Launched!";
       d.takeOff();
@@ -117,6 +127,7 @@ var s = new Slack();
 
 d.connect(function () {
   d.setup(function () {
+    io.emit('chat message', 'Drone Found: ' + d.name);
     console.log('Configured for Rolling Spider! ', d.name);
     d.flatTrim();
     d.startPing();
