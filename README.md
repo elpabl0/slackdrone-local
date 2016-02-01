@@ -31,3 +31,5 @@ dronebot left flip
 dronebot right flip
 dronebot back flip
 ```
+
+Thanks to https://github.com/voodootikigod/node-rolling-spider for the Drone Control code.
