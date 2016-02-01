@@ -16,99 +16,103 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.on('payload', function(msg){
+    io.emit('payload', msg);
     var actioned = "Unknown Command";
     s.setWebhook("https://hooks.slack.com/services/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");
-    if (msg == "dronebot status") {
+    //if (!ACTIVE) {
+    //  var actioned = "Dronebot not active";
+    //  slackreport(actioned, msg);
+    //  }
+    if (msg.text == "status") {
       if (ACTIVE) {
         var actioned = "Dronebot found:" + d.name;
-        slackreport(actioned);
+        slackreport(actioned, msg);
       } else {
         var actioned = "No Dronebot found";
-        slackreport(actioned);
+        slackreport(actioned, msg);
       }
 
     };
-  if (ACTIVE && msg) {
-      if (msg == "dronebot launch") {
+    if (ACTIVE && msg) {
+      if (msg.text == "launch") {
       var actioned = "Dronebot Launched!";
       d.takeOff();
-      slackreport(actioned);
-    } else if (msg == "dronebot land") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "land") {
       var actioned = "Initiated Landing Sequence...";
       d.land();
-      slackreport(actioned);
-    } else if (msg == "dronebot kill") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "kill") {
       var actioned = "Emergency Shutdown";
       d.emergency();
       setTimeout(function () {
         process.exit();
       }, 3000);
-      slackreport(actioned);
-    } else if (msg == "dronebot forward") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "forward") {
       var actioned = "I'm flying forward";
       d.forward({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot backward") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "backward") {
       var actioned = "I'm flying backward";
       d.backward({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot turn left") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "turn left") {
       var actioned = "I'm turning left";
       d.turnLeft({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot fly left") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "fly left") {
       var actioned = "I'm flying left";
       d.tiltLeft({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot fly right") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "fly right") {
       var actioned = "I'm flying right";
       d.tiltRight({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot turn right") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "turn right") {
       var actioned = "I'm turning right";
       d.turnRight({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot up") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "up") {
       var actioned = "I'm flying up";
       d.up({ steps: STEPS * 2.5 });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot down") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "down") {
       var actioned = "I'm flying down";
       d.down({ steps: STEPS * 2.5 });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot front flip") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "front flip") {
       var actioned = "I'm flipping forward";
       d.frontFlip({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot left flip") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "left flip") {
       var actioned = "I'm flipping left";
       d.leftFlip({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot right flip") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "right flip") {
       var actioned = "I'm flipping right";
       d.rightFlip({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
-    } else if (msg == "dronebot back flip") {
+      slackreport(actioned, msg);
+    } else if (msg.text == "back flip") {
       var actioned = "I'm flipping backwards";
       d.backFlip({ steps: STEPS });
       cooldown();
-      slackreport(actioned);
+      slackreport(actioned, msg);
     }
   }
-  console.log(actioned);
+  console.log(actioned, msg);
   });
 });
 
@@ -159,11 +163,11 @@ function cooldown() {
   }, STEPS * 12);
 }
 
-function slackreport(actioned) {
+function slackreport(actioned, msg) {
   s.webhook({
-  channel: "#hacktesting",
+  channel: "#" + msg.channel_name,
   username: "dronebot",
-  text: actioned
+  text: actioned + ", " + msg.user_name
 }, function(err, response) {
   console.log(response);
 });
